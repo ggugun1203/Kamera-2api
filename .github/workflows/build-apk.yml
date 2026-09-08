@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    name: Build Debug APK
+    name: Buat APK Debug
     runs-on: ubuntu-latest
 
     steps:
@@ -26,12 +26,20 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Validate Gradle Wrapper
-        uses: gradle/actions/wrapper-validation@v4
-        continue-on-error: true
+      - name: Ensure Gradle Wrapper JAR exists
+        run: |
+          mkdir -p gradle/wrapper
+          if [ ! -f gradle/wrapper/gradle-wrapper.jar ] || [ ! -s gradle/wrapper/gradle-wrapper.jar ]; then
+            echo "Mengunduh gradle-wrapper.jar resmi..."
+            curl -sSL -f -o gradle/wrapper/gradle-wrapper.jar https://raw.githubusercontent.com/gradle/gradle/master/gradle/wrapper/gradle-wrapper.jar
+          fi
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+      - name: Ensure Debug Keystore exists
+        run: |
+          if [ ! -f debug.keystore ]; then
+            echo "Membuat debug.keystore otomatis..."
+            keytool -genkeypair -alias androiddebugkey -keypass android -keystore debug.keystore -storepass android -dname "CN=Android Debug,O=Android,C=US" -keyalg RSA -keysize 2048 -validity 10000
+          fi
 
       - name: Prepare Secrets Configuration
         run: |
@@ -43,11 +51,13 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build APK with Gradle
-        run: ./gradlew assembleDebug --stacktrace
+        run: ./gradlew assembleDebug --stacktrace --no-daemon
 
       - name: Upload Debug APK Artifact
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: Kamera-Pro-Note-9-Debug-APK
           path: app/build/outputs/apk/debug/*.apk
           retention-days: 14
+
