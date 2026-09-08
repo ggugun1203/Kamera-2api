@@ -19,6 +19,7 @@ import { ErgonomicBottomBar } from './components/ErgonomicBottomBar';
 import { RedmiCamera2DiagnosticModal } from './components/RedmiCamera2DiagnosticModal';
 import { QuickSettingsDrawer } from './components/QuickSettingsDrawer';
 import { GalleryModal } from './components/GalleryModal';
+import { GitHubApkBuildModal } from './components/GitHubApkBuildModal';
 import { cameraAudio } from './utils/audio';
 
 export const App: React.FC = () => {
@@ -71,6 +72,7 @@ export const App: React.FC = () => {
   const [showDiagnostics, setShowDiagnostics] = useState<boolean>(false);
   const [showQuickSettings, setShowQuickSettings] = useState<boolean>(false);
   const [showGallery, setShowGallery] = useState<boolean>(false);
+  const [showGitHubBuild, setShowGitHubBuild] = useState<boolean>(false);
 
   // Video Ref & MediaRecorder
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -273,6 +275,7 @@ export const App: React.FC = () => {
             onFlashToggle={handleFlashCycle}
             onOpenQuickSettings={() => setShowQuickSettings(true)}
             onOpenDiagnostics={() => setShowDiagnostics(true)}
+            onOpenGitHubBuild={() => setShowGitHubBuild(true)}
           />
 
           {/* Lower Thumb Zone Overlay */}
@@ -368,6 +371,11 @@ export const App: React.FC = () => {
           onDeleteItem={(id) => setCapturedItems((prev) => prev.filter((i) => i.id !== id))}
           onClose={() => setShowGallery(false)}
         />
+      )}
+
+      {/* GitHub APK Build Modal */}
+      {showGitHubBuild && (
+        <GitHubApkBuildModal onClose={() => setShowGitHubBuild(false)} />
       )}
     </div>
   );

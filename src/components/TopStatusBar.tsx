@@ -1,6 +1,6 @@
 import React from 'react';
 import { Camera2Info, FlashMode } from '../types/camera';
-import { Zap, ZapOff, Sliders, Cpu, Activity } from 'lucide-react';
+import { Zap, ZapOff, Sliders, Cpu, Github } from 'lucide-react';
 
 interface Props {
   fps: number;
@@ -10,6 +10,7 @@ interface Props {
   onFlashToggle: () => void;
   onOpenQuickSettings: () => void;
   onOpenDiagnostics: () => void;
+  onOpenGitHubBuild: () => void;
 }
 
 export const TopStatusBar: React.FC<Props> = ({
@@ -20,6 +21,7 @@ export const TopStatusBar: React.FC<Props> = ({
   onFlashToggle,
   onOpenQuickSettings,
   onOpenDiagnostics,
+  onOpenGitHubBuild,
 }) => {
   return (
     <div className="absolute top-0 inset-x-0 z-30 flex items-center justify-between px-4 pt-3 pb-2 bg-gradient-to-b from-black/80 via-black/40 to-transparent">
@@ -36,8 +38,18 @@ export const TopStatusBar: React.FC<Props> = ({
         </span>
       </button>
 
-      {/* 2. Top Controls: Flash, RAW Tag, Quick Settings */}
+      {/* 2. Top Controls: GitHub APK, Flash, RAW Tag, Quick Settings */}
       <div className="flex items-center gap-2">
+        {/* GitHub APK Build button */}
+        <button
+          onClick={onOpenGitHubBuild}
+          className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-400/20 border border-amber-400/60 text-amber-400 hover:bg-amber-400 hover:text-black transition-all active:scale-90 text-[10px] font-bold"
+          title="Panduan Build APK di GitHub Actions"
+        >
+          <Github className="w-3.5 h-3.5" />
+          <span className="hidden xs:inline">Build APK</span>
+        </button>
+
         {/* RAW DNG status badge */}
         {isRawEnabled && (
           <span className="px-2 py-0.5 rounded-md bg-amber-500/25 border border-amber-400 text-amber-300 text-[10px] font-mono font-bold tracking-wider">
