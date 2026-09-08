@@ -21,43 +21,62 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-          cache: 'gradle'
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          packages: 'platforms;android-36 build-tools;36.0.0'
 
-      - name: Ensure Gradle Wrapper JAR exists
+      - name: Accept Android SDK Licenses
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses || true
+
+      - name: Ensure Gradle Wrapper exists
         run: |
           mkdir -p gradle/wrapper
           if [ ! -f gradle/wrapper/gradle-wrapper.jar ] || [ ! -s gradle/wrapper/gradle-wrapper.jar ]; then
             echo "Mengunduh gradle-wrapper.jar resmi..."
             curl -sSL -f -o gradle/wrapper/gradle-wrapper.jar https://raw.githubusercontent.com/gradle/gradle/master/gradle/wrapper/gradle-wrapper.jar
           fi
+          if [ ! -f gradlew ] || [ ! -s gradlew ]; then
+            curl -sSL -f -o gradlew https://raw.githubusercontent.com/gradle/gradle/master/gradlew
+          fi
+          chmod +x ./gradlew
 
-      - name: Ensure Debug Keystore exists
+      - name: Generate Debug Keystore
         run: |
           if [ ! -f debug.keystore ]; then
-            echo "Membuat debug.keystore otomatis..."
-            keytool -genkeypair -alias androiddebugkey -keypass android -keystore debug.keystore -storepass android -dname "CN=Android Debug,O=Android,C=US" -keyalg RSA -keysize 2048 -validity 10000
+            echo "Membuat debug.keystore..."
+            keytool -genkeypair -v \
+              -keystore debug.keystore \
+              -alias androiddebugkey \
+              -keypass android \
+              -storepass android \
+              -keyalg RSA \
+              -keysize 2048 \
+              -validity 10000 \
+              -dname "CN=Android Debug,O=Android,C=US"
           fi
 
-      - name: Prepare Secrets Configuration
+      - name: Prepare Secrets & Environment
         run: |
-          if [ ! -f .env ]; then
-            cp .env.example .env || touch .env
+          if [ -f .env.example ]; then
+            cp .env.example .env
+          else
+            touch .env
           fi
 
-      - name: Make Gradlew Executable
-        run: chmod +x ./gradlew
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Build APK with Gradle
         run: ./gradlew assembleDebug --stacktrace --no-daemon
 
       - name: Upload Debug APK Artifact
-        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: Kamera-Pro-Note-9-Debug-APK
           path: app/build/outputs/apk/debug/*.apk
           retention-days: 14
+
 
