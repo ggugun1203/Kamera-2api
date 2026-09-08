@@ -1,6 +1,6 @@
 {
   "name": "Kamera Pro Note 9",
   "description": "Aplikasi kamera lengkap untuk Redmi Note 9 dengan Camera2 API 60 FPS, mode sinematik bokeh, kontrol pro manual, dan dukungan RAW dengan UI 1 tangan.",
-  "requestFramePermissions": [],
+  "requestFramePermissions": ["camera", "microphone"],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
