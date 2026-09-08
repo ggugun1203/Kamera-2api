@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Kamera Pro Note 9</string>
+    <string name="camera_permission_required">Izin kamera dan mikrofon diperlukan untuk merekam foto dan video</string>
+    <string name="grant_permission">Berikan Izin</string>
+    <string name="mode_photo">FOTO</string>
+    <string name="mode_video_60fps">VIDEO 60FPS</string>
+    <string name="mode_cinematic">SINEMATIK</string>
+    <string name="mode_pro">PRO MANUAL</string>
+    <string name="mode_bokeh">BOKEH PORTRAIT</string>
+    <string name="camera2_activated">Camera2 API Aktif</string>
+    <string name="force_60fps_enabled">Paksa 60 FPS: AKTIF</string>
+    <string name="force_60fps_disabled">Paksa 60 FPS: NONAKTIF</string>
+    <string name="raw_dng_enabled">RAW (DNG) Aktif</string>
+    <string name="one_handed_right">Mode Tangan Kanan</string>
+    <string name="one_handed_left">Mode Tangan Kiri</string>
+</resources>
